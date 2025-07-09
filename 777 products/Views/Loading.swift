@@ -8,8 +8,25 @@
 import SwiftUI
 
 struct Loading: View {
+    @EnvironmentObject var coordinator: Coordinator
+    @AppStorage("bgNimber") var bgNumber = 1
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Background(backgroundNumber: bgNumber)
+            Text("Loading...")
+                .font(Font.custom("Green Mountain 3", size: screenHeight*0.05))
+                .foregroundColor(.white)
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .padding(.bottom)
+        }
+        
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                coordinator.navigate(to: .home)
+            }
+        }
+        
     }
 }
 

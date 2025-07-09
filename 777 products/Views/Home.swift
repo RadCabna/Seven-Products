@@ -8,8 +8,17 @@
 import SwiftUI
 
 struct Home: View {
+    @AppStorage("bgNimber") var bgNumber = 1
+    @AppStorage("selectedMenu") var selectedMenu = 0
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Background(backgroundNumber: bgNumber)
+            Text("HOME")
+                .font(Font.custom("Green Mountain 3", size: screenHeight*0.05))
+                .foregroundColor(.white)
+           BottomBar()
+        }
     }
 }
 
