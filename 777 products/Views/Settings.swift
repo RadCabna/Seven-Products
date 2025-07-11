@@ -11,7 +11,10 @@ struct Settings: View {
     @AppStorage("bgNimber") var bgNumber = 1
     @AppStorage("sound") var sound = true
     @AppStorage("selectedMenu") var selectedMenu = 0
+    @AppStorage("weeklyLimit") var weeklyLimit = "$3000"
+    @AppStorage("monthlyLimit") var monthlyLimit = "$12000"
     @State private var bgArray = Arrays.settingsBGArray
+    @State private var addPositionsPresented = false
     var body: some View {
         ZStack {
             Background(backgroundNumber: bgNumber)
@@ -31,6 +34,22 @@ struct Settings: View {
                                 .font(Font.custom("Green Mountain 3", size: screenHeight*0.02))
                                 .foregroundColor(.textYellow)
                                 .offset(x: -screenHeight*0.14)
+                            TextField("", text: $weeklyLimit)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.center)
+                                .font(Font.custom("Green Mountain 3", size: screenHeight*0.025))
+                                .foregroundColor(.red)
+                                .onChange(of: weeklyLimit) { newValue in
+                                    let cleaned = newValue.filter { $0.isNumber || $0 == "." }
+                                    if !cleaned.isEmpty {
+                                        weeklyLimit = "$" + cleaned
+                                    } else {
+                                        weeklyLimit = ""
+                                    }
+                                }
+                                .padding(.horizontal,screenHeight*0.1)
+                                .offset(x: screenHeight*0.09)
                         }
                     )
                 Image(.limitFrame)
@@ -43,6 +62,22 @@ struct Settings: View {
                                 .font(Font.custom("Green Mountain 3", size: screenHeight*0.02))
                                 .foregroundColor(.textYellow)
                                 .offset(x: -screenHeight*0.135)
+                            TextField("", text: $monthlyLimit)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .keyboardType(.numberPad)
+                                .multilineTextAlignment(.center)
+                                .font(Font.custom("Green Mountain 3", size: screenHeight*0.025))
+                                .foregroundColor(.red)
+                                .onChange(of: monthlyLimit) { newValue in
+                                    let cleaned = newValue.filter { $0.isNumber }
+                                    if !cleaned.isEmpty {
+                                        monthlyLimit = "$" + cleaned
+                                    } else {
+                                        monthlyLimit = ""
+                                    }
+                                }
+                                .padding(.horizontal,screenHeight*0.1)
+                                .offset(x: screenHeight*0.09)
                         }
                     )
                 Image(.settingsFrame)
@@ -97,10 +132,7 @@ struct Settings: View {
                                         .scaledToFit()
                                         .frame(height: screenHeight*0.07)
                                     if item == bgNumber-1 {
-                                        Image(.arrowUp)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: screenHeight*0.06)
+                                       AnimateArrow()
                                             .offset(y: screenHeight*0.07)
                                     }
                                 }
@@ -116,6 +148,9 @@ struct Settings: View {
                     .resizable()
                     .scaledToFit()
                     .frame(height: screenHeight*0.05)
+                    .onTapGesture {
+                        addPositionsPresented.toggle()
+                    }
                 Image(.editPasitionButton)
                     .resizable()
                     .scaledToFit()
@@ -124,6 +159,11 @@ struct Settings: View {
             }
             BottomBar()
         }
+        
+        .fullScreenCover(isPresented: $addPositionsPresented) {
+            AddNewPosition(fromSettings: .constant(true), addPositionPresented: $addPositionsPresented)
+        }
+        
     }
 }
 
