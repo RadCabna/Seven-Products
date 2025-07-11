@@ -79,6 +79,7 @@ class Formatter {
     private let inputFormatter = Foundation.DateFormatter()
     private let outputFormatter = Foundation.DateFormatter()
     private let monthFormatter = Foundation.DateFormatter()
+    private let monthDayFormatter = Foundation.DateFormatter()
     private let weekdayFormatter = Foundation.DateFormatter()
     
     init() {
@@ -94,12 +95,44 @@ class Formatter {
         monthFormatter.dateFormat = "MMM"
         monthFormatter.locale = Locale(identifier: "en_US")
         
+        monthDayFormatter.dateFormat = "MMM dd"
+        monthDayFormatter.locale = Locale(identifier: "en_US")
+        
         // Настройка для получения дня недели из 3 букв
         weekdayFormatter.dateFormat = "EEE"
         weekdayFormatter.locale = Locale(identifier: "en_US")
     }
     
     // MARK: - Methods
+    
+    
+    /// Увеличивает дату на 1 день
+    /// - Parameter dateString: Дата в формате "dd.MM.yy"
+    /// - Returns: Новая дата в формате "dd.MM.yy"
+    func increaseDateByOneDay(_ dateString: String) -> String {
+        guard let date = inputFormatter.date(from: dateString) else {
+            return dateString
+        }
+        
+        let calendar = Calendar.current
+        let newDate = calendar.date(byAdding: .day, value: 1, to: date) ?? date
+        
+        return inputFormatter.string(from: newDate)
+    }
+    
+    /// Уменьшает дату на 1 день
+    /// - Parameter dateString: Дата в формате "dd.MM.yy"
+    /// - Returns: Новая дата в формате "dd.MM.yy"
+    func decreaseDateByOneDay(_ dateString: String) -> String {
+        guard let date = inputFormatter.date(from: dateString) else {
+            return dateString
+        }
+        
+        let calendar = Calendar.current
+        let newDate = calendar.date(byAdding: .day, value: -1, to: date) ?? date
+        
+        return inputFormatter.string(from: newDate)
+    }
     
     /// Преобразует "18.01.25" в "January 18, 2025"
     func convertToEnglishFormat(_ dateString: String) -> String {
@@ -131,6 +164,13 @@ class Formatter {
             return "ERR" // Возвращаем ошибку, если не удалось распарсить
         }
         return monthFormatter.string(from: date).uppercased()
+    }
+    
+    func getMonthAndDay(_ dateString: String) -> String {
+        guard let date = inputFormatter.date(from: dateString) else {
+            return "ERR" // Возвращаем ошибку, если не удалось распарсить
+        }
+        return monthDayFormatter.string(from: date).uppercased()
     }
     
     /// Получает день недели из 3 букв из даты в формате "dd.MM.yy"

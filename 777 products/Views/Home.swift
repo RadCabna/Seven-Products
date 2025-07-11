@@ -12,6 +12,7 @@ struct Home: View {
     @AppStorage("selectedMenu") var selectedMenu = 0
     @AppStorage("weekly") var weekly = true
     @State private var selectedDate = Date()
+    @State private var listArray = UserDefaults.standard.array(forKey: "listArray") as? [[String]] ?? []
     var body: some View {
         ZStack {
             Background(backgroundNumber: bgNumber)

@@ -36,7 +36,7 @@ struct TemplatesList: View {
                 .frame(height: screenHeight*0.8)
                 .overlay(
                     ZStack {
-                        HStack(spacing: screenHeight*0.08) {
+                        HStack(spacing: screenHeight*0.07) {
                             Text("Category")
                                 .font(Font.custom("Green Mountain 3", size: screenHeight*0.012))
                                 .foregroundColor(.textYellow)
@@ -68,21 +68,28 @@ struct TemplatesList: View {
                                                             .scaledToFit()
                                                             .frame(height: screenHeight*0.04)
                                                             .frame(maxWidth: screenHeight*0.05)
+                                                            .padding(.trailing)
                                                         Spacer()
                                                         Text(templatesListArray[item][2])
                                                             .font(Font.custom("Green Mountain 3", size: screenHeight*0.012))
                                                             .foregroundColor(.textYellow)
                                                             .frame(width: screenHeight*0.12)
+                                                            .shadow(color: .black, radius: 1)
+                                                            .shadow(color: .black, radius: 1)
                                                         Spacer()
                                                         Text(templatesListArray[item][3] + templatesListArray[item][4])
                                                             .font(Font.custom("Green Mountain 3", size: screenHeight*0.012))
                                                             .foregroundColor(.textYellow)
                                                             .frame(width: screenHeight*0.07)
+                                                            .shadow(color: .black, radius: 1)
+                                                            .shadow(color: .black, radius: 1)
                                                         Spacer()
                                                         Text(priceFormat(price: templatesListArray[item][5]))
-                                                            .font(Font.custom("Green Mountain 3", size: screenHeight*0.012))
-                                                            .foregroundColor(.textYellow)
-                                                            .frame(width: screenHeight*0.05)
+                                                            .font(Font.custom("Green Mountain 3", size: screenHeight*0.014))
+                                                            .foregroundColor(.red)
+                                                            .frame(width: screenHeight*0.08)
+                                                            .shadow(color: .black, radius: 1)
+                                                            .shadow(color: .black, radius: 1)
                                                     }
                                                         .frame(maxWidth: screenHeight*0.41)
                                                 )
@@ -90,7 +97,7 @@ struct TemplatesList: View {
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(height: screenHeight*0.035)
-                                                .offset(x: -screenWidth*0.52)
+                                                .offset(x: -screenHeight*0.24)
                                                 .onTapGesture {
                                                     removeElement(item: item)
                                                 }
@@ -133,7 +140,7 @@ struct TemplatesList: View {
         }
         
         .fullScreenCover(isPresented: $addPositionPresented) {
-            AddNewPosition(fromSettings: .constant(true), addPositionPresented: $addPositionPresented)
+            AddNewPosition(fromSettings: .constant(true), addPositionPresented: $addPositionPresented, selectedTemplateIndex: .constant(0))
         }
         
         .onChange(of: addPositionPresented) { isPresented in
@@ -207,6 +214,9 @@ struct TemplatesList: View {
         
         let weekDay = dateFormatter.getWeekdayAbbreviation("18.07.25")
         print(weekDay)
+        
+        let monthDay = dateFormatter.getMonthAndDay("18.07.25")
+        print(monthDay)
     }
     
     func priceFormat(price: String) -> String {

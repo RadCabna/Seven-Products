@@ -21,3 +21,11 @@ extension String {
         return formatter.convertToShortFormat(self)
     }
 }
+
+extension Date {
+    func toShortFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yy"
+        return formatter.string(from: self)
+    }
+}

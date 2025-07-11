@@ -21,6 +21,7 @@ struct AddNewPosition: View {
     @State private var templatesListArray = UserDefaults.standard.array(forKey: "templatesListArray") as? [[String]] ?? Arrays.startTemplatesArray
     @Binding var fromSettings: Bool
     @Binding var addPositionPresented: Bool
+    @Binding var selectedTemplateIndex: Int
     var body: some View {
         ZStack {
             Background(backgroundNumber: bgNumber)
@@ -285,6 +286,28 @@ struct AddNewPosition: View {
             }
             .offset(y: screenHeight*0.07)
         }
+        
+        .onAppear {
+            updatePresentedData()
+        }
+        
+    }
+    
+    func updatePresentedData() {
+        image = templatesListArray[selectedTemplateIndex][1]
+        title = templatesListArray[selectedTemplateIndex][2]
+        amount  = templatesListArray[selectedTemplateIndex][3]
+        units  = templatesListArray[selectedTemplateIndex][4]
+        switch units {
+        case "p":
+            unitNumber = 0
+        case "l":
+            unitNumber = 1
+        default:
+            unitNumber = 2
+        }
+        price  = templatesListArray[selectedTemplateIndex][5]
+        categoryIndex = categoryesArray.firstIndex(where: {$0.image == templatesListArray[selectedTemplateIndex][1] }) ?? 0
     }
     
     func addNewCategory() {
@@ -326,5 +349,5 @@ struct AddNewPosition: View {
 }
 
 #Preview {
-    AddNewPosition(fromSettings: .constant(true), addPositionPresented: .constant(true))
+    AddNewPosition(fromSettings: .constant(true), addPositionPresented: .constant(true), selectedTemplateIndex: .constant(0))
 }

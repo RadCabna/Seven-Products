@@ -161,7 +161,7 @@ struct Settings: View {
         }
         
         .fullScreenCover(isPresented: $addPositionsPresented) {
-            AddNewPosition(fromSettings: .constant(true), addPositionPresented: $addPositionsPresented)
+            AddNewPosition(fromSettings: .constant(true), addPositionPresented: $addPositionsPresented, selectedTemplateIndex: .constant(0))
         }
         
     }
