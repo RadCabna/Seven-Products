@@ -19,6 +19,8 @@ struct AddNewPosition: View {
     @State private var categoryesArray = Arrays.categoriesArray
     @State private var categoryIndex = 0
     @State private var templatesListArray = UserDefaults.standard.array(forKey: "templatesListArray") as? [[String]] ?? Arrays.startTemplatesArray
+    @State private var temporaryListPosition = UserDefaults.standard.array(forKey: "temporaryListPosition") as? [String] ?? ["01.01.25","productImage1","Apple","1", "p","1.75","0"]
+    @State private var addPositionInListPresentred: Bool = false
     @Binding var fromSettings: Bool
     @Binding var addPositionPresented: Bool
     @Binding var selectedTemplateIndex: Int
@@ -276,10 +278,12 @@ struct AddNewPosition: View {
                     .onTapGesture {
                         if fromSettings {
                             addNewCategory()
+                            addPositionPresented.toggle()
                         } else {
-                            
+                            updateTemporaryListPosition()
+                            addPositionInListPresentred.toggle()
                         }
-                        addPositionPresented.toggle()
+                        
 //                        UserDefaults.standard.removeObject(forKey: "templatesListArray")
                     }
                 Spacer()
@@ -287,10 +291,24 @@ struct AddNewPosition: View {
             .offset(y: screenHeight*0.07)
         }
         
+        .fullScreenCover(isPresented: $addPositionInListPresentred, content: {
+            AddPositionInList(addPositionPresented: $addPositionInListPresentred, fromTamplates: .constant(false))
+        })
+        
         .onAppear {
+            
             updatePresentedData()
         }
         
+    }
+    
+    func updateTemporaryListPosition() {
+        temporaryListPosition[1] = image
+        temporaryListPosition[2] = title
+        temporaryListPosition[3] = amount
+        temporaryListPosition[4] = units
+        temporaryListPosition[5] = price.replacingOccurrences(of: "$", with: "")
+        UserDefaults.standard.setValue(temporaryListPosition, forKey: "temporaryListPosition")
     }
     
     func updatePresentedData() {

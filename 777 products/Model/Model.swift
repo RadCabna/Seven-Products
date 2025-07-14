@@ -57,8 +57,8 @@ class Arrays {
         ["01.01.25","productImage8", "Shower gel", "0.25", "l", "4.10"],
         ["01.01.25","productImage9", "Chocolate bar", "1", "p", "1.50"],
         ["01.01.25","productImage10", "Almonds", "1", "kg", "8.20"],
-        ["01.01.25","productImage11", "Apple", "1", "kg", "1.20"],
-        ["01.01.25","productImage12", "Apple", "1", "kg", "1.20"]
+        ["01.01.25","productImage11", "Sponges", "1", "kg", "1.20"],
+        ["01.01.25","productImage12", "Сroissant", "1", "kg", "1.20"]
     ]
     
     static var barButtons = [
@@ -81,6 +81,7 @@ class Formatter {
     private let monthFormatter = Foundation.DateFormatter()
     private let monthDayFormatter = Foundation.DateFormatter()
     private let weekdayFormatter = Foundation.DateFormatter()
+    private let bigMonthFormatter = Foundation.DateFormatter()
     
     init() {
         // Настройка для входящего формата "dd.MM.yy"
@@ -101,6 +102,9 @@ class Formatter {
         // Настройка для получения дня недели из 3 букв
         weekdayFormatter.dateFormat = "EEE"
         weekdayFormatter.locale = Locale(identifier: "en_US")
+        
+        bigMonthFormatter.dateFormat = "MMMM"
+        bigMonthFormatter.locale = Locale(identifier: "en_US")
     }
     
     // MARK: - Methods
@@ -134,6 +138,31 @@ class Formatter {
         return inputFormatter.string(from: newDate)
     }
     
+    func increaseDateByOneMonth(_ dateString: String) -> String {
+        guard let date = inputFormatter.date(from: dateString) else {
+            return dateString
+        }
+        
+        let calendar = Calendar.current
+        let newDate = calendar.date(byAdding: .month, value: 1, to: date) ?? date
+        
+        return inputFormatter.string(from: newDate)
+    }
+    
+    /// Уменьшает дату на 1 день
+    /// - Parameter dateString: Дата в формате "dd.MM.yy"
+    /// - Returns: Новая дата в формате "dd.MM.yy"
+    func decreaseDateByOneMonth(_ dateString: String) -> String {
+        guard let date = inputFormatter.date(from: dateString) else {
+            return dateString
+        }
+        
+        let calendar = Calendar.current
+        let newDate = calendar.date(byAdding: .month, value: -1, to: date) ?? date
+        
+        return inputFormatter.string(from: newDate)
+    }
+    
     /// Преобразует "18.01.25" в "January 18, 2025"
     func convertToEnglishFormat(_ dateString: String) -> String {
         guard let date = inputFormatter.date(from: dateString) else {
@@ -156,6 +185,8 @@ class Formatter {
         return inputFormatter.string(from: date)
     }
     
+   
+    
     /// Получает месяц из 3 букв из даты в формате "dd.MM.yy"
     /// - Parameter dateString: Дата в формате "18.01.25"
     /// - Returns: Месяц в формате "JAN"
@@ -171,6 +202,13 @@ class Formatter {
             return "ERR" // Возвращаем ошибку, если не удалось распарсить
         }
         return monthDayFormatter.string(from: date).uppercased()
+    }
+    
+    func getBigMonth(_ dateString: String) -> String {
+        guard let date = inputFormatter.date(from: dateString) else {
+            return "ERR" // Возвращаем ошибку, если не удалось распарсить
+        }
+        return bigMonthFormatter.string(from: date).uppercased()
     }
     
     /// Получает день недели из 3 букв из даты в формате "dd.MM.yy"

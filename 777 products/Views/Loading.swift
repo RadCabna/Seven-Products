@@ -10,7 +10,7 @@ import SwiftUI
 struct Loading: View {
     @EnvironmentObject var coordinator: Coordinator
     @AppStorage("bgNimber") var bgNumber = 1
-    
+    @AppStorage("selectedMenu") var selectedMenu = 0
     var body: some View {
         ZStack {
             Background(backgroundNumber: bgNumber)
@@ -22,6 +22,7 @@ struct Loading: View {
         }
         
         .onAppear {
+            selectedMenu = 0
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 coordinator.navigate(to: .home)
             }

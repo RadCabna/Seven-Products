@@ -18,7 +18,11 @@ struct AddPositionInList: View {
     @State private var price = "1.75"
     @State private var newPositionDataArray = ["01.01.25","productImage1","Apple","1", "p","1.75","0"]
     @State private var listArray = UserDefaults.standard.array(forKey: "listArray") as? [[String]] ?? []
+    @State private var templatesListArray = UserDefaults.standard.array(forKey: "templatesListArray") as? [[String]] ?? Arrays.startTemplatesArray
+    @State private var temporaryListPosition = UserDefaults.standard.array(forKey: "temporaryListPosition") as? [String] ?? ["01.01.25","productImage1","Apple","1", "p","1.75","0"]
     @Binding var addPositionPresented: Bool
+    @Binding var fromTamplates: Bool
+    //    @Binding var selectedTemplateIndex: Int
     var body: some View {
         ZStack {
             Background(backgroundNumber: bgNumber)
@@ -91,8 +95,6 @@ struct AddPositionInList: View {
                                     .frame(height: screenHeight*0.025)
                                     .onTapGesture {
                                         decreasedDateByDay()
-//                                        changeUnits(direction: -1)
-//                                        updateUnits()
                                     }
                                 RoundedRectangle(cornerRadius: screenHeight*0.01)
                                     .frame(width: screenHeight*0.18, height: screenHeight*0.037)
@@ -109,8 +111,6 @@ struct AddPositionInList: View {
                                     .frame(height: screenHeight*0.025)
                                     .onTapGesture {
                                         increasedDateByDay()
-//                                        changeUnits(direction: 1)
-//                                        updateUnits()
                                     }
                             }
                             .offset(x: screenHeight*0.055)
@@ -123,16 +123,26 @@ struct AddPositionInList: View {
                     .frame(height: screenHeight*0.05)
                     .offset(y: -screenHeight*0.08)
                     .onTapGesture {
-                       addNewPositionInList()
-//                        UserDefaults.standard.removeObject(forKey: "listArray")
+                        addNewPositionInList()
+                        addPositionPresented.toggle()
+                        //                        UserDefaults.standard.removeObject(forKey: "listArray")
                     }
             }
         }
         
         .onAppear {
             getStringDate()
+            updateNewListPosition()
         }
         
+    }
+    
+    func updateNewListPosition() {
+        image = temporaryListPosition[1]
+        title = temporaryListPosition[2]
+        amount = temporaryListPosition[3]
+        units = temporaryListPosition[4]
+        price = temporaryListPosition[5]
     }
     
     func addNewPositionInList() {
@@ -177,5 +187,5 @@ struct AddPositionInList: View {
 }
 
 #Preview {
-    AddPositionInList(addPositionPresented: .constant(true))
+    AddPositionInList(addPositionPresented: .constant(true), fromTamplates: .constant(true))
 }

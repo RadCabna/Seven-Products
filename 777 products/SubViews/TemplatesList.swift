@@ -10,10 +10,14 @@ import SwiftUI
 struct TemplatesList: View {
     @AppStorage("bgNimber") var bgNumber = 1
     @State private var templatesListArray = UserDefaults.standard.array(forKey: "templatesListArray") as? [[String]] ?? Arrays.startTemplatesArray
+    @State private var temporaryListPosition = UserDefaults.standard.array(forKey: "temporaryListPosition") as? [String] ?? ["01.01.25","productImage1","Apple","1", "p","1.75","0"]
     @State private var listElementXOffset: CGFloat = 0
-    @State private var listOffsetXArray: [ListItemOffset] =  Array(repeating: ListItemOffset(), count: 50)
+    @State private var listOffsetXArray: [ListItemOffset] =  Array(repeating: ListItemOffset(), count: 100)
     @State private var addPositionPresented: Bool = false
+    @State private var addPositionInListPresented: Bool = false
+    @State private var tapletsListIndex = 0
     @Binding var wantToSelectTemplate: Bool
+    @Binding var templatesPresented: Bool
     var body: some View {
         ZStack {
             Background(backgroundNumber: bgNumber)
@@ -30,6 +34,9 @@ struct TemplatesList: View {
                 .frame(height: screenHeight*0.04)
                 .frame(maxWidth: .infinity, maxHeight: screenHeight*0.9, alignment: .topLeading)
                 .padding(.horizontal)
+                .onTapGesture {
+                    templatesPresented.toggle()
+                }
             Image(.templatesListFrame)
                 .resizable()
                 .scaledToFit()
@@ -106,7 +113,9 @@ struct TemplatesList: View {
                                             if !wantToSelectTemplate {
                                                 tapOnListElement(item: item)
                                             } else {
-                                                
+                                                tapletsListIndex = item
+                                                updateTemporaryListPosition(item: item)
+                                                addPositionInListPresented.toggle()
                                             }
                                         }
                                         .offset(x: listOffsetXArray[item].offset)
@@ -143,6 +152,10 @@ struct TemplatesList: View {
             AddNewPosition(fromSettings: .constant(true), addPositionPresented: $addPositionPresented, selectedTemplateIndex: .constant(0))
         }
         
+        .fullScreenCover(isPresented: $addPositionInListPresented, content: {
+            AddPositionInList(addPositionPresented: $addPositionInListPresented, fromTamplates: .constant(true))
+        })
+        
         .onChange(of: addPositionPresented) { isPresented in
             if !isPresented {
                 templatesListArray = UserDefaults.standard.array(forKey: "templatesListArray") as? [[String]] ?? Arrays.startTemplatesArray
@@ -156,6 +169,15 @@ struct TemplatesList: View {
         }
         
     }
+    
+     func updateTemporaryListPosition(item: Int) {
+    temporaryListPosition[1] = templatesListArray[item][1]
+    temporaryListPosition[2] = templatesListArray[item][2]
+    temporaryListPosition[3] = templatesListArray[item][3]
+    temporaryListPosition[4] = templatesListArray[item][4]
+    temporaryListPosition[5] = templatesListArray[item][5].replacingOccurrences(of: "$", with: "")
+    UserDefaults.standard.setValue(temporaryListPosition, forKey: "temporaryListPosition")
+}
     
     func tapOnListElement(item: Int) {
         if !listOffsetXArray[item].moved {
@@ -226,5 +248,5 @@ struct TemplatesList: View {
 }
 
 #Preview {
-    TemplatesList(wantToSelectTemplate: .constant(false))
+    TemplatesList(wantToSelectTemplate: .constant(false), templatesPresented: .constant(true))
 }
