@@ -29,7 +29,30 @@ struct ListItemOffset {
     var moved: Bool = false
 }
 
+struct StatisticList {
+    var name: String
+    var amount: Double = 0
+    var scaleIndex: CGFloat = 1
+}
+
 class Arrays {
+    
+    static var montlyStatisticList = [
+        StatisticList(name: "WEEK 1"),
+        StatisticList(name: "WEEK 2"),
+        StatisticList(name: "WEEK 3"),
+        StatisticList(name: "WEEK 4")
+    ]
+    
+    static var weeklyStatisticList: [StatisticList] = [
+        StatisticList(name: "MON"),
+        StatisticList(name: "TUE"),
+        StatisticList(name: "WED"),
+        StatisticList(name: "THU"),
+        StatisticList(name: "FRI"),
+        StatisticList(name: "SAT"),
+        StatisticList(name: "SUN")
+    ]
     
     static var categoriesArray: [Category] = [
         Category(image: "productImage1", name: "Fruit"),

@@ -31,12 +31,12 @@ struct CircularChartView: View {
                 
                 // Подписи секторов
                 ForEach(0..<data.count, id: \.self) { index in
-                    SectorLabel(
-                        angle: middleAngle(for: index),
-                        text: "\(Int(data[index]))%",
-                        color: colors[index]
-                    )
-                    .frame(width: 200, height: 200)
+//                    SectorLabel(
+//                        angle: middleAngle(for: index),
+//                        text: "\(Int(data[index]))%",
+//                        color: colors[index]
+//                    )
+//                    .frame(width: 200, height: 200)
                 }
                 
                 // Центральный текст
@@ -101,17 +101,6 @@ struct CircularChartView: View {
         }
     }
     
-    // Правильное вычисление среднего угла для подписей
-    private func correctMiddleAngle(for index: Int) -> Double {
-        // Для данных [25, 30, 45] правильные углы:
-        // Сектор 0 (25%): 0° - 90° → средний угол 45°
-        // Сектор 1 (30%): 90° - 198° → средний угол 144°
-        // Сектор 2 (45%): 198° - 360° → средний угол 279°
-        
-        let angles = [45.0, 144.0, 279.0] // Правильные средние углы
-        return angles[index] - 90 // Применяем поворот -90°
-    }
-    
     // Вычисление среднего угла для размещения подписи
     private func middleAngle(for index: Int) -> Double {
         let start = startAngle(for: index)
@@ -122,59 +111,59 @@ struct CircularChartView: View {
     }
 }
 
-// Компонент для отрисовки сектора круга
-struct PieSlice: View {
-    let startAngle: Double
-    let endAngle: Double
-    let color: Color
-    
-    var body: some View {
-        Path { path in
-            let center = CGPoint(x: 100, y: 100)
-            let radius: CGFloat = 90
-            
-            path.move(to: center)
-            path.addArc(
-                center: center,
-                radius: radius,
-                startAngle: Angle(degrees: startAngle - 90), // -90 для начала с верха
-                endAngle: Angle(degrees: endAngle - 90),
-                clockwise: false
-            )
-            path.closeSubpath()
-        }
-        .fill(color)
-    }
-}
-
-// Компонент для подписи сектора
-struct SectorLabel: View {
-    let angle: Double
-    let text: String
-    let color: Color
-    
-    var body: some View {
-        GeometryReader { geometry in
-            let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
-            let radius: CGFloat = 65 // Расстояние от центра до текста
-            let radians = angle * .pi / 180
-            let x = center.x + radius * cos(radians)
-            let y = center.y + radius * sin(radians)
-            
-            Text(text)
-                .font(.system(size: 12, weight: .bold))
-                .foregroundColor(.white)
-                .background(
-                    Circle()
-                        .fill(color)
-                        .frame(width: 28, height: 28)
-                )
-                .rotationEffect(.degrees(angle))
-                .position(x: x, y: y)
-                 // Поворачиваем текст радиально к центру
-        }
-    }
-}
+//// Компонент для отрисовки сектора круга
+//struct PieSlice: View {
+//    let startAngle: Double
+//    let endAngle: Double
+//    let color: Color
+//    
+//    var body: some View {
+//        Path { path in
+//            let center = CGPoint(x: 100, y: 100)
+//            let radius: CGFloat = 90
+//            
+//            path.move(to: center)
+//            path.addArc(
+//                center: center,
+//                radius: radius,
+//                startAngle: Angle(degrees: startAngle - 90), // -90 для начала с верха
+//                endAngle: Angle(degrees: endAngle - 90),
+//                clockwise: false
+//            )
+//            path.closeSubpath()
+//        }
+//        .fill(color)
+//    }
+//}
+//
+//// Компонент для подписи сектора
+//struct SectorLabel: View {
+//    let angle: Double
+//    let text: String
+//    let color: Color
+//    
+//    var body: some View {
+//        GeometryReader { geometry in
+//            let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
+//            let radius: CGFloat = 65 // Расстояние от центра до текста
+//            let radians = angle * .pi / 180
+//            let x = center.x + radius * cos(radians)
+//            let y = center.y + radius * sin(radians)
+//            
+//            Text(text)
+//                .font(.system(size: 12, weight: .bold))
+//                .foregroundColor(.white)
+//                .background(
+//                    Circle()
+//                        .fill(color)
+//                        .frame(width: 28, height: 28)
+//                )
+//                .rotationEffect(.degrees(angle))
+//                .position(x: x, y: y)
+//                 // Поворачиваем текст радиально к центру
+//        }
+//    }
+//}
 
 // Альтернативная версия с анимацией
 //struct AnimatedCircularChartView: View {

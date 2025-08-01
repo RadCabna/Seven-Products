@@ -15,6 +15,7 @@ struct Settings: View {
     @AppStorage("monthlyLimit") var monthlyLimit = "$12000"
     @State private var bgArray = Arrays.settingsBGArray
     @State private var addPositionsPresented = false
+    @State private var editPositionPresented = false
     var body: some View {
         ZStack {
             Background(backgroundNumber: bgNumber)
@@ -156,9 +157,16 @@ struct Settings: View {
                     .scaledToFit()
                     .frame(height: screenHeight*0.05)
                     .padding(.bottom, screenHeight*0.09)
+                    .onTapGesture {
+                        editPositionPresented.toggle()
+                    }
             }
             BottomBar()
         }
+        
+        .fullScreenCover(isPresented: $editPositionPresented, content: {
+            TemplatesList(wantToSelectTemplate: .constant(false), templatesPresented: $editPositionPresented)
+        })
         
         .fullScreenCover(isPresented: $addPositionsPresented) {
             AddNewPosition(fromSettings: .constant(true), addPositionPresented: $addPositionsPresented, selectedTemplateIndex: .constant(0))

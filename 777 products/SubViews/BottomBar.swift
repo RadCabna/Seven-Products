@@ -51,13 +51,13 @@ struct BottomBar: View {
     func navigation() {
         switch selectedMenu {
         case 0:
-            coordinator.navigate(to: .home)
+            NavGuard.shared.currentScreen = .HOME
         case 1:
-            coordinator.navigate(to: .list)
+            NavGuard.shared.currentScreen = .LIST
         case 2:
-            coordinator.navigate(to: .statistic)
+            NavGuard.shared.currentScreen = .STATISTICS
         case 3:
-            coordinator.navigate(to: .settings)
+            NavGuard.shared.currentScreen = .SETTINGS
         default:
             break
         }

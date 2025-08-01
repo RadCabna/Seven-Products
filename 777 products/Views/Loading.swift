@@ -24,7 +24,7 @@ struct Loading: View {
         .onAppear {
             selectedMenu = 0
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                coordinator.navigate(to: .home)
+//                coordinator.navigate(to: .home)
             }
         }
         
